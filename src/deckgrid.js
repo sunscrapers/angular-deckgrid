@@ -64,7 +64,7 @@ angular.module('akoenig.deckgrid').factory('Deckgrid', [
 
                 self.$$watchers.push(onDestroy);
             });
-            
+
             mql = $window.matchMedia('(orientation: portrait)');
             mql.addListener(self.$$onMediaQueryChange.bind(self));
 
@@ -134,11 +134,16 @@ angular.module('akoenig.deckgrid').factory('Deckgrid', [
         };
 
         Deckgrid.prototype.$$cachedParams = function $$cachedParams (column) {
-            if (!this.$$cache) this.$$cache = {};
-            if (this.$$cache.column == column) return this.$$cache;
-            this.$$cache = { column: column, modelLength: 0 }
+            if (!this.$$cache) {
+                this.$$cache = {};
+            }
+            if (this.$$cache.column === column) {
+                return this.$$cache;
+            }
+            this.$$cache = { column: column, modelLength: 0 };
             return this.$$cache;
-        }
+        };
+
         /**
          * @private
          *
@@ -159,13 +164,13 @@ angular.module('akoenig.deckgrid').factory('Deckgrid', [
             }
 
             var cachedParams = this.$$cachedParams(this.$$scope.layout.columns);
-            if (cachedParams.modelLength == 0) {
-              // layout change, reset columns
-              this.$$scope.columns = [];
+            if (cachedParams.modelLength === 0) {
+                // layout change, reset columns
+                this.$$scope.columns = [];
             }
 
             var modelLength = 0;
-            if (this.$$scope.model) { modelLength = this.$$scope.model.length }
+            if (this.$$scope.model) { modelLength = this.$$scope.model.length; }
 
             for (var index = cachedParams.modelLength; index < modelLength; index++) {
                 var card = this.$$scope.model[index];
@@ -176,6 +181,7 @@ angular.module('akoenig.deckgrid').factory('Deckgrid', [
                 }
 
                 this.$$scope.columns[column].push(card);
+                card.$index = index;
             }
 
             cachedParams.modelLength = modelLength;
